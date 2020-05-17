@@ -139,6 +139,7 @@ function Root() {
         <div>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <DateTimePicker
+              required
               disabled={loading}
               label="DateTimePicker"
               className="datepicker"
