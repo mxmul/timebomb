@@ -1,6 +1,6 @@
 .countdown {
   font-family: Menlo, monospace;
-  font-size: 5rem;
+  font-size: 8vw;
   font-variant-numeric: tabular-nums;
 }
 
@@ -11,8 +11,8 @@
 
 .page-content {
   box-sizing: border-box;
-  padding-top: 2rem;
-  min-width: 760px;
+  /* padding-top: 2rem; */
+  /* min-width: 760px; */
 }
 
 .text {
