@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Link,
   useParams,
   useHistory,
   Redirect,
@@ -125,7 +126,6 @@ function Root() {
 
   return (
     <div>
-      <h1>Timebomb</h1>
       <form onSubmit={onSubmit}>
         <TextareaAutosize
           disabled={loading}
@@ -167,6 +167,14 @@ function App() {
     <div className="page-wrapper">
       <div className="page-content">
         <Router>
+          <h1 className="title">
+            <Link to="/">
+              <span role="img" aria-label="bomb">
+                💣
+              </span>{" "}
+              timebomb
+            </Link>
+          </h1>
           <Switch>
             <Route path="/i/:id">
               <Item />
