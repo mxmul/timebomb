@@ -19,6 +19,7 @@
   "scripts": {
     "start": "netlify dev",
     "build": "react-scripts build",
+    "serve": "serve -s build",
     "test": "react-scripts test"
   },
   "eslintConfig": {
@@ -37,6 +38,7 @@
     ]
   },
   "devDependencies": {
-    "netlify-cli": "^2.51.0"
+    "netlify-cli": "^2.51.0",
+    "serve": "^11.3.0"
   }
 }
