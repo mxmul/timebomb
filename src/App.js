@@ -10,6 +10,12 @@ import {
 } from "react-router-dom";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import DateFnsUtils from "@date-io/date-fns";
 import { useQuery } from "react-query";
 import { readItem, createItem } from "./api";
@@ -19,7 +25,7 @@ import {
   getUnixTime,
   isPast,
 } from "date-fns";
-import TextareaAutosize from "react-autosize-textarea";
+import TextField from "@material-ui/core/TextField";
 import "./App.css";
 
 function leftPad(int, { width = 2 } = {}) {
@@ -36,18 +42,23 @@ function Clock({ millisRemaining }) {
     return () => clearInterval(id);
   }, []);
 
-  const milliseconds = millisRemaining % 1000;
+  const milliseconds = Math.floor((millisRemaining % 1000) / 10);
   const seconds = Math.floor(millisRemaining / 1000) % 60;
   const minutes = Math.floor(millisRemaining / 60000) % 60;
   const hours = Math.floor(millisRemaining / 3600000);
 
   return (
-    <div>
-      <div className="countdown" style={{ opacity: visible ? "1" : "0.75" }}>
-        {leftPad(hours)}:{leftPad(minutes)}:{leftPad(seconds)}:
-        {leftPad(milliseconds, { width: 3 })}
-      </div>
-    </div>
+    <Box textAlign="center">
+      <Typography
+        variant="h2"
+        component="h2"
+        style={{ opacity: visible ? "1" : "0.75" }}
+        gutterBottom
+      >
+        {leftPad(hours)}:{leftPad(minutes)}:{leftPad(seconds)}.
+        {leftPad(milliseconds)}
+      </Typography>
+    </Box>
   );
 }
 
@@ -98,7 +109,12 @@ function Item() {
   return (
     <>
       <Countdown target={fromUnixTime(availableAfter)} />
-      <div className="text">{text}</div>
+
+      <Box textAlign="center">
+        <Typography variant="h5" component="p" gutterBottom>
+          {text}
+        </Typography>
+      </Box>
     </>
   );
 }
@@ -126,56 +142,70 @@ function Root() {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <TextareaAutosize
-          disabled={loading}
-          className="textarea"
+      <form onSubmit={onSubmit} className="form">
+        <TextField
+          id="outlined-textarea"
+          label="Leave a message!"
+          margin="normal"
           placeholder="Leave a message!"
+          multiline
+          variant="outlined"
+          fullWidth
+          rows={7}
           onChange={(e) => {
             setText(e.target.value);
           }}
+          autoFocus
           value={text}
         />
-        <div>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DateTimePicker
-              required
-              disabled={loading}
-              label="DateTimePicker"
-              className="datepicker"
-              openTo="hours"
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </MuiPickersUtilsProvider>
-          <Button
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DateTimePicker
+            required
             disabled={loading}
-            variant="contained"
-            color="primary"
-            size="large"
-            type="submit"
-          >
-            Submit
-          </Button>
-        </div>
+            fullWidth
+            label="Available After"
+            openTo="hours"
+            value={selectedDate}
+            onChange={handleDateChange}
+          />
+        </MuiPickersUtilsProvider>
+        <Button
+          margin="normal"
+          disabled={loading}
+          fullWidth
+          variant="contained"
+          color="primary"
+          size="large"
+          type="submit"
+          className="submit"
+        >
+          Submit
+        </Button>
       </form>
+
+      <Backdrop open={loading}>
+        <CircularProgress />
+      </Backdrop>
     </div>
   );
 }
 
 function App() {
   return (
-    <div className="page-wrapper">
-      <div className="page-content">
+    <>
+      <CssBaseline />
+      <Container maxWidth="sm">
         <Router>
-          <h1 className="title">
-            <Link to="/">
-              <span role="img" aria-label="bomb">
-                💣
-              </span>{" "}
-              timebomb
-            </Link>
-          </h1>
+          <Typography variant="h4" component="h1" gutterBottom>
+            <Box textAlign="center">
+              <Link to="/" className="title-link">
+                <span role="img" aria-label="bomb">
+                  💣
+                </span>{" "}
+                timebomb
+              </Link>
+            </Box>
+          </Typography>
           <Switch>
             <Route path="/i/:id">
               <Item />
@@ -188,8 +218,8 @@ function App() {
             </Route>
           </Switch>
         </Router>
-      </div>
-    </div>
+      </Container>
+    </>
   );
 }
 
